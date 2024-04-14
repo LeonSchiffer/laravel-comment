@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->uuid("id")->primary();
+            $table->uuid("parent_id")->nullable();
             $table->morphs("commentable");
             $table->morphs("user");
             $table->text("comment");
