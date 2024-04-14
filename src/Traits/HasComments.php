@@ -4,6 +4,7 @@ namespace BishalGurung\Comment\Traits;
 
 use Illuminate\Support\Str;
 use BishalGurung\Comment\Models\Comment;
+use BishalGurung\Comment\Services\CommentService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasComments
@@ -33,5 +34,11 @@ trait HasComments
         $this->user_type = $user_type;
         $this->user_id = $user_id;
         return $this;
+    }
+
+    public function getComments()
+    {
+        $comments = (new CommentService)->getCommentWithReactionCount($this);
+        return $comments;
     }
 }
