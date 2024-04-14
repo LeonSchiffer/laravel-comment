@@ -1,5 +1,5 @@
 {
-    "name": "bishalgurung/comment-helper",
+    "name": "bishalgurung/laravel-comment",
     "type": "library",
     "license": "MIT",
     "autoload": {
