@@ -1,0 +1,20 @@
+{
+    "name": "bishalgurung/comment-helper",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BishalGurung\\Comment\\": "src"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BishalGurung\\Comment\\CommentServiceProvider"
+            ]
+        }
+    }
+}
