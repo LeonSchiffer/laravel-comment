@@ -14,10 +14,11 @@ class ReactionController extends Controller
         $request->validate([
             "reaction_id" => ["required", Rule::exists("reactions", "id")]
         ]);
-        $comment->reactions()->detach();
-        $comment->reactions()->attach($request->reaction_id, [
-            "user_type" => "App\\Models\\User",
-            "user_id" => 1
-        ]);
+        // $comment->reactions()->detach();
+        // $comment->reactions()->attach($request->reaction_id, [
+        //     "user_type" => "App\\Models\\User",
+        //     "user_id" => 1
+        // ]);
+        return $comment->react($request->reaction_id);
     }
 }

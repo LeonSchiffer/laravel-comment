@@ -4,15 +4,16 @@ namespace BishalGurung\Comment\Models;
 
 use App\Models\CommentReaction;
 use Database\Factories\CommentFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use BishalGurung\Comment\Traits\HasReaction;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Comment extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    use HasReaction;
 
     public $incrementing = false;
 
@@ -22,11 +23,6 @@ class Comment extends Model
     {
         return CommentFactory::new();
     }
-
-    // public function reactions(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Reaction::class);
-    // }
 
     public function reactions()
     {
