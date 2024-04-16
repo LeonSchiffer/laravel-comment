@@ -23,6 +23,7 @@ return new class extends Migration
             $table->nullableTimestamps();
         });
         Schema::create('comment_reaction', function (Blueprint $table) {
+            $table->id();
             $table->foreignUuid("comment_id");
             $table->morphs("user");
             $table->foreignId("reaction_id");
