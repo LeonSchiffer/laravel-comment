@@ -1,5 +1,5 @@
 # Installation
-#### Requiring the dependency
+#### Installing the package
 ```bash
 composer require bishalgurung/laravel-comment
 ```
@@ -38,13 +38,13 @@ return [
 
 ```
 
-# Associate comments and reactions with Eloquent models
+# Associate comments with Eloquent models
 
 This package allows your models the ability to have comments associated to it.
 
 Here's a small example of how to add comment to your model.
 
-Lets say you have a Post model. Inorder to make it commentable, you just attach the HasComment trait to it
+Lets say you have a Post model. In order to make it commentable, you just attach the HasComment trait to it
 
 ```php
 use BishalGurung\Comment\Traits\HasComments;
@@ -68,18 +68,53 @@ $post->setCommentUser($user)->addComment("Hey there, this is how you add a comme
 If you want to retrieve all the comments of a post, use:
 ```php
 $post = Post::find(1);
-return $post->getComments();
+return $post->getComments(int $pagination_limit, bool $with_reaction_count); 
 ```
-You can also attach reaction to a comment. For that, just use:
-```php
-use BishalGurung\Comment\Models\Comment;
 
-$comment = Comment::find(1);
-$comment->react(1); // reaction id as the parameter
+# Attach reaction to an Eloquent model
+
+You can also attach reaction to any model. For that, just use:
+```php
+use BishalGurung\Comment\Traits\HasReaction;
+
+class Post extends Model
+{
+    use HasReaction;
+}
 ```
-The reactions count will be returned along with getComments() function above
+
+Now to add a reaction to a model, just use:
+```php
+$post = Post::find(1);
+$post->react($reaction_type_id); // The primary key i.e. "id" from reaction_types table
+```
+
+Now to retrieve the reaction counts along with the Post model, we use:
+```php
+$posts = Post::with("reactionCount")->get();
+```
+
+This will return reaction count attached to Post collection as below:
+```json
+{
+    "reaction_count": [
+        {
+            "model_id": "1",
+            "reaction_type_id": 1,
+            "type": "like",
+            "count": 3
+        },
+        {
+            "model_id": "1",
+            "reaction_type_id": 2,
+            "type": "love",
+            "count": 5
+        }
+    ]
+}
+```
 
 # Upcoming feature
-- Ability to attach reaction to any of your eloquent model and not just Comment model
 - Custom icons for your reaction
+- Ability to reply to a comment
 
