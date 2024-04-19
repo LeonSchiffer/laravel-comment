@@ -11,8 +11,10 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->uuid("id")->primary();
             $table->uuid("parent_id")->nullable();
-            $table->morphs("commentable");
-            $table->morphs("user");
+            $table->string("commentable_type");
+            $table->string("commentable_id");
+            $table->string("user_type");
+            $table->string("user_id");
             $table->text("comment");
             $table->softDeletes();
             $table->nullableTimestamps();

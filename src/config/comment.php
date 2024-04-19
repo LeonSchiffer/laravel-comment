@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "reactions" => [
+    "reaction_types" => [
         "like",
         "love",
         "dislike"

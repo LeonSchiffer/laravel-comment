@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use BishalGurung\Comment\Exceptions\InvalidUserException;
 use BishalGurung\Comment\Repositories\CommentRepository;
 
-trait HasComments
+trait HasComment
 {
     private $user_type;
     private $user_id;

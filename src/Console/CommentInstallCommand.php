@@ -16,7 +16,7 @@ class CommentInstallCommand extends Command
 
     private function migrateReactions()
     {
-        $reactions = config("comment.reactions");
+        $reactions = config("comment.reaction_types");
         $existing_reactions = ReactionType::whereIn("type", $reactions)->get("type")->pluck("type");
         $reactions = collect($reactions);
         $new_reactions = $reactions->diff($existing_reactions);
