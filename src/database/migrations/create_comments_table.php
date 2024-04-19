@@ -17,16 +17,18 @@ return new class extends Migration
             $table->softDeletes();
             $table->nullableTimestamps();
         });
-        Schema::create("reactions", function (Blueprint $table) {
+        Schema::create("reaction_types", function (Blueprint $table) {
             $table->id();
             $table->string("type");
             $table->nullableTimestamps();
         });
-        Schema::create('comment_reaction', function (Blueprint $table) {
+        Schema::create('reactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid("comment_id");
-            $table->morphs("user");
-            $table->foreignId("reaction_id");
+            $table->string("model_type");
+            $table->string("model_id");
+            $table->string("user_type");
+            $table->string("user_id");
+            $table->foreignId("reaction_type_id");
             $table->nullableTimestamps();
         });
     }

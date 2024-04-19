@@ -1,15 +1,15 @@
 <?php
 
-namespace BishalGurung\Comment\Services;
+namespace BishalGurung\Comment\Repositories;
 
 use BishalGurung\Comment\Models\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use BishalGurung\Comment\Models\CommentReaction;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use BishalGurung\Comment\Exceptions\InvalidUserException;
+use BishalGurung\Comment\Models\Reaction;
 
-class CommentService
+class CommentRepository
 {
     // public function getCommentWithReactionCount($model, int $paginate = 0)
     // {
@@ -69,12 +69,12 @@ class CommentService
 
     private function formatCommentData($comments, $reactions)
     {
-        $reactions = $reactions->groupBy("comment_id");
+        $reactions = $reactions->groupBy("model_id");
         $data = collect([]);
         foreach ($comments as $comment) {
             $reaction_counts = isset($reactions[$comment->id])
             ? $reactions[$comment->id]
-                ->map(fn ($reaction_count) => $reaction_count->only("reaction_id", "count"))
+                ->map(fn ($reaction_count) => $reaction_count->only("reaction_type_id", "count"))
             : [];
             $data->push([
                 ...$comment->toArray(),
@@ -90,24 +90,14 @@ class CommentService
 
     private function getReactionCounts(array $comment_ids)
     {
-        $reactions = CommentReaction::query()
-            ->selectRaw("comment_id, reaction_id, count(reaction_id) as count")
-            ->whereIn("comment_id", $comment_ids)
-            ->groupBy("comment_id", "reaction_id")
+        $reactions = Reaction::query()
+            ->selectRaw("model_id, reaction_type_id, count(reaction_type_id) as count")
+            ->where("model_type", Comment::class)
+            ->whereIn("model_id", $comment_ids)
+            ->groupBy("model_id", "reaction_type_id")
             ->get();
         return $reactions;
     }
 
-    public function reactToComment($comment_id, $reaction_id, $user = null)
-    {
-        if (!($user || auth()->user()))
-            throw new InvalidUserException;
-        return CommentReaction::updateOrCreate([
-            "comment_id" => $comment_id,
-            "user_type" => $user ? get_class($user) : get_class(auth()->user()),
-            "user_id" => $user ? $user->id : auth()->id()
-        ], [
-            "reaction_id" => $reaction_id,
-        ]);
-    }
+    
 }

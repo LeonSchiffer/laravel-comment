@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use BishalGurung\Comment\Services\CommentService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use BishalGurung\Comment\Exceptions\InvalidUserException;
+use BishalGurung\Comment\Repositories\CommentRepository;
 
 trait HasComments
 {
@@ -59,12 +60,15 @@ trait HasComments
      * @param int $pagination_limit The pagination limit value, if not provided will just all comments
      * @return array
      */
-    public function getComments($pagination_limit = 0)
+    public function getComments(int $pagination_limit = 0, bool $with_reactions = false)
     {
         // $comments = $this->comments()->paginate($pagination_limit);
-        $comments = $pagination_limit ? $this->comments()->paginate($pagination_limit) : $this->comments;
-        $paginated_data = ($comments instanceof LengthAwarePaginator) ? $comments->toArray() : null;
-        $comments = (new CommentService)->getCommentWithReactionCount($comments);
-        return ($paginated_data) ? [... $paginated_data, "data" => $comments] : $comments;
+        $query = $this
+            ->comments()
+            ->when($with_reactions, function ($q) {
+                $q->with("reactionCount");
+            });
+        $comments = $pagination_limit ? $query->paginate($pagination_limit) : $this->query->get();
+        return $comments;
     }
 }
