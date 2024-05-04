@@ -25,5 +25,7 @@ class CommentInstallCommand extends Command
             $reactions_to_add[] = ["type" => $reaction, "created_at" => now(), "updated_at" => now()];
         });
         ReactionType::insert($reactions_to_add);
+        $this->info("Added {$new_reactions->count()} new reactions: ");
+        $this->info(implode(", ", $new_reactions->toArray()));
     }
 }

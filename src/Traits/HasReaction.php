@@ -2,6 +2,7 @@
 
 namespace BishalGurung\Comment\Traits;
 
+use App\Models\User;
 use BishalGurung\Comment\Models\Reaction;
 use BishalGurung\Comment\Repositories\CommentRepository;
 use BishalGurung\Comment\Repositories\ReactionRepository;
