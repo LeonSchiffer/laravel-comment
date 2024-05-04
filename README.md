@@ -114,7 +114,17 @@ This will return reaction count attached to Post collection as below:
 }
 ```
 
+# Attach reply to a comment
+If you take a look at the comment model in the _**vendor/bishalgurung/laravel-comment/src/Models/Comment.php**_ file, you will notice that the Comment model also uses the **_HasComment_** trait. Which means that you can comment on a comment model. So a comment on a comment model is a reply, and this is how you use the reply system.
+
+```php
+    $comment = Comment::find(1);
+    $comment->addComment("This is a reply");
+```
+And to get replies, just use:
+```php
+    $comment->getComments(int $pagination_limit, bool $with_reaction_count); 
+```
 # Upcoming feature
 - Custom icons for your reaction
-- Ability to reply to a comment
 
